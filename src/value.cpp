@@ -1,3 +1,24 @@
-//
-// Created by dikach on 12.03.25.
-//
+#include "../include/expression.hpp"
+#include <cmath>
+
+
+template<typename T>
+Value<T>::Value(T value) const:
+    value_ (value)
+{}
+
+template<typename T>
+T Value<T>::eval(std::map<std::string, T> context) const {
+    (void) context;
+    return value_;
+}
+
+template<typename T>
+std::string Value<T>::to_string() const {
+    return std::to_string(value_);
+}
+
+template<typename T>
+Expression<T> Value<T>::derivative() const {
+    return Expression<T>(static_cast<T>(0));
+}

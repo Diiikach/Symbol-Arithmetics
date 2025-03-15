@@ -5,181 +5,202 @@
 #include <map>
 #include <memory>
 
+template <typename T>
+class Expression;
+
+
+
 // Abstract class
-template <typename val_type>
+template <typename T>
 class ExpressionImplementation {
 public:
     ExpressionImplementation() = default;
-
     virtual ~ExpressionImplementation() = default;
-    virtual val_type eval(std::map<std::string, val_type> context) const = 0;
+    virtual T eval(std::map<std::string, T> context) const = 0;
     virtual std::string to_string() const = 0;
+    virtual Expression<T> derivative() const;
 };
 
-template <typename val_type>
+template <typename T>
 class Expression {
 public:
-    explicit Expression(std::string var);
-    explicit Expression(val_type val);
+    Expression(std::string var);
+    Expression(T val);
 
-
-    Expression operator+ (const Expression& that);
+    Expression operator+ (const Expression& that) const;
     Expression& operator+=(const Expression& that);
-    Expression  operator* (const Expression& that);
+    Expression operator- (const Expression& that) const;
+    Expression& operator-=(const Expression& that);
+    Expression  operator* (const Expression& that) const;
     Expression& operator*=(const Expression& that);
-    Expression operator/ (const Expression& that);
+    Expression operator/ (const Expression& that) const;
     Expression& operator/=(const Expression& that);
+    Expression operator-() const;
+    Expression derivative();
 
-    Expression pow(const Expression<val_type>& power);
-    Expression sin();
-    Expression cos();
-    Expression exp(const Expression<val_type>& that);
-    Expression ln();
+    Expression pow(const Expression<T>& power) const;
+    Expression sin() const;
+    Expression cos() const;
+    Expression exp(const Expression<T>& that) const;
+    Expression ln() const;
 
-    val_type eval(std::map<std::string, val_type> context) const;
+    T eval(std::map<std::string, T> context) const;
     std::string to_string() const;
-private:
-    Expression(std::shared_ptr<ExpressionImplementation<val_type>> impl);
+    Expression derivative() const;
 
-    std::shared_ptr<ExpressionImplementation<val_type>> impl_;
+    Expression(std::shared_ptr<ExpressionImplementation<T>> impl);
+
+    private:
+        std::shared_ptr<ExpressionImplementation<T>> impl_;
 
 };
 
-template <typename val_type>
-class Value: public ExpressionImplementation<val_type> {
+template <typename T>
+class Value: public ExpressionImplementation<T> {
 public:
-     Value(val_type value);
+     Value(T value);
      ~Value() override = default;
 
-    val_type eval(std::map<std::string, val_type> context) const override;
+    T eval(std::map<std::string, T> context) const override;
     std::string to_string() const override;
+    Expression<T> derivative() const override;
+
 private:
-    val_type value_;
+    T value_;
 };
 
-template <typename val_type>
-class Variable: public ExpressionImplementation<val_type> {
+template <typename T>
+class Variable: public ExpressionImplementation<T> {
 public:
-    Variable(std::string name);
+    Variable(std::string name) const;
     ~Variable() override = default;
 
-    val_type eval(std::map<std::string, val_type> context) const override;
+    T eval(std::map<std::string, T> context) const override;
     std::string to_string() const override;
+    Expression<T> derivative() const override;
 private:
     std::string name_;
 };
 
-template <typename val_type>
-class DotProduct: public ExpressionImplementation<val_type> {
+template <typename T>
+class DotProduct: public ExpressionImplementation<T> {
 public:
-    DotProduct(Expression<val_type> left, Expression<val_type> right);
+    DotProduct(Expression<T> left, Expression<T> right) const;
     ~DotProduct() override = default;
 
-    val_type eval(std::map<std::string, val_type> context) const override;
+    T eval(std::map<std::string, T> context) const override;
     std::string to_string() const override;
+    Expression<T> derivative() const override;
 private:
-    Expression<val_type> left_;
-    Expression<val_type> right_;
+    Expression<T> left_;
+    Expression<T> right_;
 };
 
-template <typename val_type>
-class SlashProduct: public ExpressionImplementation<val_type> {
+template <typename T>
+class SlashProduct: public ExpressionImplementation<T> {
 public:
-    SlashProduct(Expression<val_type> left, Expression<val_type> right);
+    SlashProduct(Expression<T> left, Expression<T> right) const;
     ~SlashProduct() override = default;
 
-    val_type eval(std::map<std::string, val_type> context) const override;
+    T eval(std::map<std::string, T> context) const override;
     std::string to_string() const override;
+    Expression<T> derivative() const override;
 private:
-    Expression<val_type> left_;
-    Expression<val_type> right_;
+    Expression<T> left_;
+    Expression<T> right_;
 };
 
-template <typename val_type>
-class PlusProduct: public ExpressionImplementation<val_type> {
+template <typename T>
+class PlusProduct: public ExpressionImplementation<T> {
 public:
-    PlusProduct(Expression<val_type> left, Expression<val_type> right);
+    PlusProduct(const Expression<T> left, const Expression<T> right) const;
     ~PlusProduct() override = default;
 
-    val_type eval(std::map<std::string, val_type> context) const override;
+    T eval(std::map<std::string, T> context) const override;
     std::string to_string() const override;
+    Expression<T> derivative() const override;
 private:
-    Expression<val_type> left_;
-    Expression<val_type> right_;
+    Expression<T> left_;
+    Expression<T> right_;
 };
 
-template <typename val_type>
-class MinusProduct: public ExpressionImplementation<val_type> {
+template <typename T>
+class PowProduct: public ExpressionImplementation<T> {
 public:
-    MinusProduct(Expression<val_type> left, Expression<val_type> right);
-    ~MinusProduct() override = default;
-
-    val_type eval(std::map<std::string, val_type> context) const override;
-    std::string to_string() const override;
-private:
-    Expression<val_type> left_;
-    Expression<val_type> right_;
-};
-
-template <typename val_type>
-class PowProduct: public ExpressionImplementation<val_type> {
-public:
-    PowProduct(Expression<val_type> base, Expression<val_type> power);
+    PowProduct(const Expression<T> base, const Expression<T> power) const;
     ~PowProduct() override = default;
 
-    val_type eval(std::map<std::string, val_type> context) const override;
+    T eval(std::map<std::string, T> context) const override;
     std::string to_string() const override;
+    Expression<T> derivative() const override;
 private:
-    Expression<val_type> base_;
-    Expression<val_type> power_;
+    Expression<T> base_;
+    Expression<T> power_;
 };
 
-template <typename val_type>
-class SinFunc: public ExpressionImplementation<val_type> {
+template <typename T>
+class SinFunc: public ExpressionImplementation<T> {
 public:
-    SinFunc(Expression<val_type> arg);
+    SinFunc(Expression<T> arg) const;
     ~SinFunc() override = default;
 
-    val_type eval(std::map<std::string, val_type> context) const override;
+    T eval(std::map<std::string, T> context) const override;
     std::string to_string() const override;
+    Expression<T> derivative() const override;
 private:
-    Expression<val_type> arg_;
+    Expression<T> arg_;
 };
 
-template <typename val_type>
-class CosFunc: public ExpressionImplementation<val_type> {
+template <typename T>
+class CosFunc: public ExpressionImplementation<T> {
 public:
-    CosFunc(Expression<val_type>& arg);
+    CosFunc(Expression<T>& arg) const;
     ~CosFunc() override = default;
 
-    val_type eval(std::map<std::string, val_type> context) const override;
+    T eval(std::map<std::string, T> context) const override;
     std::string to_string() const override;
+    Expression<T> derivative() const override;
 private:
-    Expression<val_type> arg_;
+    Expression<T> arg_;
 };
 
-template <typename val_type>
-class LnFunc: public ExpressionImplementation<val_type> {
+template <typename T>
+class LnFunc: public ExpressionImplementation<T> {
 public:
-    LnFunc(Expression<val_type> arg);
+    LnFunc(Expression<T> arg) const;
     ~LnFunc() override = default;
 
-    val_type eval(std::map<std::string, val_type> context) const override;
+    T eval(std::map<std::string, T> context) const override;
     std::string to_string() const override;
+    Expression<T> derivative() const override;
 private:
-    Expression<val_type> arg_;
+    Expression<T> arg_;
 };
 
-template <typename val_type>
-class ExpFunc: public ExpressionImplementation<val_type> {
+template <typename T>
+class ExpFunc: public ExpressionImplementation<T> {
 public:
-    ExpFunc(Expression<val_type> arg);
+    ExpFunc(Expression<T> arg) const;
     ~ExpFunc() override = default;
 
-    val_type eval(std::map<std::string, val_type> context) const override;
+    T eval(std::map<std::string, T> context) const override;
     std::string to_string() const override;
+    Expression<T> derivative() const override;
 private:
-    Expression<val_type> arg_;
+    Expression<T> arg_;
+};
+
+template <typename T>
+class UnaryMinusProduct: public ExpressionImplementation<T> {
+public:
+    UnaryMinusProduct(Expression<T> &arg) const;
+    ~UnaryMinusProduct() override = default;
+
+    T eval(std::map<std::string, T> context) const override;
+    std::string to_string() const override;
+    Expression<T> derivative() const override;
+private:
+    Expression<T> arg_;
 };
 
 #endif
