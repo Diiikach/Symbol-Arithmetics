@@ -3,7 +3,7 @@
 
 
 template<typename T>
-SinFunc<T>::SinFunc(Expression<T> arg) const:
+SinFunc<T>::SinFunc(Expression<T> arg):
     arg_ (arg)
 {}
 

@@ -3,7 +3,7 @@
 
 
 template<typename T>
-SlashProduct<T>::SlashProduct(Expression<T> left, Expression<T> right) const:
+SlashProduct<T>::SlashProduct(Expression<T> left, Expression<T> right):
     left_  (left),
     right_ (right)
 {}

@@ -3,7 +3,7 @@
 
 
 template<typename T>
-CosFunc<T>::CosFunc(Expression<T>& arg) const:
+CosFunc<T>::CosFunc(const Expression<T>& arg):
     arg_ (arg)
 {}
 

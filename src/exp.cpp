@@ -3,7 +3,7 @@
 
 
 template<typename T>
-ExpFunc<T>::ExpFunc(Expression<T> arg) const:
+ExpFunc<T>::ExpFunc(Expression<T> arg):
     arg_ (arg)
 {}
 

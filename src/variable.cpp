@@ -4,7 +4,7 @@
 
 
 template<typename T>
-Variable<T>::Variable(std::string name) const:
+Variable<T>::Variable(std::string name):
     name_ (std::move(name))
 {}
 

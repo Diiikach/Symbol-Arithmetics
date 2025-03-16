@@ -8,8 +8,6 @@
 template <typename T>
 class Expression;
 
-
-
 // Abstract class
 template <typename T>
 class ExpressionImplementation {
@@ -18,7 +16,7 @@ public:
     virtual ~ExpressionImplementation() = default;
     virtual T eval(std::map<std::string, T> context) const = 0;
     virtual std::string to_string() const = 0;
-    virtual Expression<T> derivative() const;
+    virtual Expression<T> derivative() const = 0;
 };
 
 template <typename T>
@@ -36,7 +34,6 @@ public:
     Expression operator/ (const Expression& that) const;
     Expression& operator/=(const Expression& that);
     Expression operator-() const;
-    Expression derivative();
 
     Expression pow(const Expression<T>& power) const;
     Expression sin() const;
@@ -46,7 +43,7 @@ public:
 
     T eval(std::map<std::string, T> context) const;
     std::string to_string() const;
-    Expression derivative() const;
+    Expression<T> derivative() const;
 
     Expression(std::shared_ptr<ExpressionImplementation<T>> impl);
 
@@ -72,7 +69,7 @@ private:
 template <typename T>
 class Variable: public ExpressionImplementation<T> {
 public:
-    Variable(std::string name) const;
+    Variable(std::string name);
     ~Variable() override = default;
 
     T eval(std::map<std::string, T> context) const override;
@@ -85,7 +82,7 @@ private:
 template <typename T>
 class DotProduct: public ExpressionImplementation<T> {
 public:
-    DotProduct(Expression<T> left, Expression<T> right) const;
+    DotProduct(Expression<T> left, Expression<T> right);
     ~DotProduct() override = default;
 
     T eval(std::map<std::string, T> context) const override;
@@ -99,7 +96,7 @@ private:
 template <typename T>
 class SlashProduct: public ExpressionImplementation<T> {
 public:
-    SlashProduct(Expression<T> left, Expression<T> right) const;
+    SlashProduct(Expression<T> left, Expression<T> right);
     ~SlashProduct() override = default;
 
     T eval(std::map<std::string, T> context) const override;
@@ -113,7 +110,7 @@ private:
 template <typename T>
 class PlusProduct: public ExpressionImplementation<T> {
 public:
-    PlusProduct(const Expression<T> left, const Expression<T> right) const;
+    PlusProduct(const Expression<T> left, const Expression<T> right);
     ~PlusProduct() override = default;
 
     T eval(std::map<std::string, T> context) const override;
@@ -127,7 +124,7 @@ private:
 template <typename T>
 class PowProduct: public ExpressionImplementation<T> {
 public:
-    PowProduct(const Expression<T> base, const Expression<T> power) const;
+    PowProduct(const Expression<T> base, const Expression<T> power);
     ~PowProduct() override = default;
 
     T eval(std::map<std::string, T> context) const override;
@@ -141,7 +138,7 @@ private:
 template <typename T>
 class SinFunc: public ExpressionImplementation<T> {
 public:
-    SinFunc(Expression<T> arg) const;
+    SinFunc(Expression<T> arg);
     ~SinFunc() override = default;
 
     T eval(std::map<std::string, T> context) const override;
@@ -154,7 +151,7 @@ private:
 template <typename T>
 class CosFunc: public ExpressionImplementation<T> {
 public:
-    CosFunc(Expression<T>& arg) const;
+    CosFunc(const Expression<T>& arg);
     ~CosFunc() override = default;
 
     T eval(std::map<std::string, T> context) const override;
@@ -167,7 +164,7 @@ private:
 template <typename T>
 class LnFunc: public ExpressionImplementation<T> {
 public:
-    LnFunc(Expression<T> arg) const;
+    LnFunc(Expression<T> arg);
     ~LnFunc() override = default;
 
     T eval(std::map<std::string, T> context) const override;
@@ -180,7 +177,7 @@ private:
 template <typename T>
 class ExpFunc: public ExpressionImplementation<T> {
 public:
-    ExpFunc(Expression<T> arg) const;
+    ExpFunc(Expression<T> arg);
     ~ExpFunc() override = default;
 
     T eval(std::map<std::string, T> context) const override;
@@ -193,7 +190,7 @@ private:
 template <typename T>
 class UnaryMinusProduct: public ExpressionImplementation<T> {
 public:
-    UnaryMinusProduct(Expression<T> &arg) const;
+    UnaryMinusProduct(const Expression<T> &arg);
     ~UnaryMinusProduct() override = default;
 
     T eval(std::map<std::string, T> context) const override;

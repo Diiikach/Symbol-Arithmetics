@@ -1,7 +1,7 @@
 #include "../include/expression.hpp"
 
 template<typename T>
-PlusProduct<T>::PlusProduct(Expression<T> left, Expression<T> right) const:
+PlusProduct<T>::PlusProduct(Expression<T> left, Expression<T> right):
     left_  (left),
     right_ (right) {
 }

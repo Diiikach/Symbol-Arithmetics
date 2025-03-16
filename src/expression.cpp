@@ -8,11 +8,11 @@ Expression<T>::Expression(std::shared_ptr<ExpressionImplementation<T>> impl) :
 {}
 
 template<typename T>
-Expression<T>::Expression(std::string var) const:
+Expression<T>::Expression(std::string var):
     impl_ (std::make_shared<Variable<T>>(var))
 {}
 template<typename T>
-Expression<T>::Expression(T val) const:
+Expression<T>::Expression(T val):
     impl_ (std::make_shared<Value<T>>(val))
 {}
 
@@ -39,7 +39,7 @@ Expression<T> Expression<T>::operator-()  const {
 
 template<typename T>
 Expression<T> Expression<T>::operator-(const Expression<T>& that) const {
-    return Expression<T>(std::make_shared<PlusProduct<T>>(*this, that));
+    return Expression<T>(std::make_shared<PlusProduct<T>>(*this, -that));
 }
 
 template<typename T>
@@ -101,6 +101,6 @@ std::string Expression<T>::to_string() const {
 }
 
 template<typename T>
-Expression<T> Expression<T>::derivative() {
+Expression<T> Expression<T>::derivative() const {
     return impl_->derivative();
 }

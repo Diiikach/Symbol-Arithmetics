@@ -2,7 +2,7 @@
 
 
 template<typename T>
-PowProduct<T>::PowProduct(const Expression<T> base, const Expression<T> power) const:
+PowProduct<T>::PowProduct(const Expression<T> base, const Expression<T> power):
     base_ (base),
     power_ (power)
 {}
@@ -19,9 +19,14 @@ T PowProduct<T>::eval(std::map<std::string, T> context) const {
 }
 
 template<typename T>
+std::string PowProduct<T>::to_string() const {
+    return "(" + base_.to_string() + ")^(" + power_.to_string() + ")";
+}
+
+template<typename T>
 Expression<T> PowProduct<T>::derivative() const {
     Expression<T> first_part  = power_ * Expression<T>(std::make_shared<PowProduct<T>>(base_, power_ - Expression<T>(1)));
-    Expression<T> second_part = power_.derivative();
+    Expression<T> second_part = base_.derivative();
     return first_part * second_part;
 }
 

@@ -3,7 +3,7 @@
 
 
 template<typename T>
-LnFunc<T>::LnFunc(Expression<T> arg) const:
+LnFunc<T>::LnFunc(Expression<T> arg):
     arg_ (arg)
 {}
 

@@ -2,7 +2,7 @@
 
 
 template<typename T>
-UnaryMinusProduct<T>::UnaryMinusProduct(Expression<T>& arg) const:
+UnaryMinusProduct<T>::UnaryMinusProduct(const Expression<T>& arg):
     arg_ (arg)
 {}
 

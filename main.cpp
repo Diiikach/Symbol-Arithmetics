@@ -1,8 +1,10 @@
 #include "include/template.tpp"
 #include <iostream>
 
+using namespace std;
+
 int main() {
-    Expression<long double> x("x");
-    Expression<long double> y("y");
-    std::cout << (-y).eval({{"x", -1}, {"y", 2}}) << std::endl;
+    auto a = Expression<long double>("x");
+    auto b = a.pow(Expression<long double>(2));
+    cout << b.derivative().to_string() << endl;
 }

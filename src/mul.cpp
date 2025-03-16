@@ -3,7 +3,7 @@
 
 
 template<typename T>
-DotProduct<T>::DotProduct(Expression<T> left, Expression<T> right) const:
+DotProduct<T>::DotProduct(Expression<T> left, Expression<T> right):
     left_  (left),
     right_ (right)
 {}

@@ -3,7 +3,7 @@
 
 
 template<typename T>
-Value<T>::Value(T value) const:
+Value<T>::Value(const T value):
     value_ (value)
 {}
 
