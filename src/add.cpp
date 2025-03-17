@@ -28,4 +28,3 @@ Expression<T>PlusProduct<T>::derivative() const {
     return first_part + second_part;
 }
 
-

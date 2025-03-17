@@ -29,4 +29,3 @@ Expression<T> PowProduct<T>::derivative() const {
     Expression<T> second_part = base_.derivative();
     return first_part * second_part;
 }
-

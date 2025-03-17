@@ -29,4 +29,3 @@ Expression<T> SlashProduct<T>::derivative() const {
     Expression<T> denominator_part = left_ * left_;
     return numerator_part / denominator_part;
 }
-
