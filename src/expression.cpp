@@ -118,28 +118,28 @@ Expression<T> Expression<T>::from_string(const std::string s) {
 template<typename T>
 Expression<T> Expression<T>::produce_token_(std::string s) {
     if (s.starts_with("sin(") && s.ends_with(")")) {
-        int next_token_length = s.size() - 4;
+        int next_token_length = s.size() - 5;
         if (next_token_length <= 0) {
             throw std::runtime_error("Invalid syntax: sin func called at empty argument;");
         }
         return Expression<T>(std::make_shared<SinFunc<T>>(produce_token_(s.substr(4, next_token_length))));
     }
     if (s.starts_with("cos(") && s.ends_with(")")) {
-        int next_token_length = s.size() - 4;
+        int next_token_length = s.size() - 5;
         if (next_token_length <= 0) {
             throw std::runtime_error("Invalid syntax: cos func called at empty argument;");
         }
         return Expression<T>(std::make_shared<CosFunc<T>>(produce_token_(s.substr(4, next_token_length))));
     }
     if (s.starts_with("exp(") && s.ends_with(")")) {
-        int next_token_length = s.size() - 4;
+        int next_token_length = s.size() - 5;
         if (next_token_length <= 0) {
             throw std::runtime_error("Invalid syntax: exp func called at empty argument;");
         }
         return Expression<T>(std::make_shared<ExpFunc<T>>(produce_token_(s.substr(4, next_token_length))));
     }
     if (s.starts_with("ln(") && s.ends_with(")")) {
-        int next_token_length = s.size() - 3;
+        int next_token_length = s.size() - 4;
         if (next_token_length <= 0) {
             throw std::runtime_error("Invalid syntax: ln func called at empty argument;");
         }
@@ -166,10 +166,18 @@ Expression<T> Expression<T>::parse_expression_(int& i, const std::string& s) {
     char last_operation = 0;
     bool first_token {false};
     std::string current_token;
-    for (; i < s.size() && s[i] != ')'; i++) {
+    int scope_count = 0;
+    for (; i < s.size(); i++) {
+        if (s[i] == '(') {
+            scope_count++;
+        } else if (s[i] == ')') {
+            scope_count--;
+        }
+        if (scope_count < 0)
+            break;
         // skip all spaces
         if (s[i] == ' ') continue;
-        if (s[i] == '+' || s[i] == '-' || s[i] == '^' || s[i] == '*' || s[i] == '/' || s[i] == '(') {
+        if (s[i] == '+' || s[i] == '-' || s[i] == '^' || s[i] == '*' || s[i] == '/' || (s[i] == '(' && current_token.empty())) {
             Expression current_expression(0);
             if (s[i] != '(') {
                 if (static_cast<int>(last_operation) != 0 && current_token.empty()) {
@@ -220,7 +228,7 @@ Expression<T> Expression<T>::parse_expression_(int& i, const std::string& s) {
         } else if (last_operation == '^') {
             result = result.pow(current_expression);
         } else {
-            throw std::runtime_error("Invalid syntax: two tokens nearby");
+            result = current_expression;
         }
     }
     return result;
