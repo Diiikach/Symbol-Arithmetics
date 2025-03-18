@@ -24,6 +24,8 @@ std::string Variable<T>::to_string() const {
 }
 
 template<typename T>
-Expression<T> Variable<T>::derivative() const {
-    return Expression<T>(1);
+Expression<T> Variable<T>::derivative(const std::string& var) const {
+    if (var == name_)
+        return Expression<T>(1);
+    return Expression<T>(0);
 }

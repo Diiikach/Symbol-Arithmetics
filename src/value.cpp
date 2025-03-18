@@ -19,6 +19,6 @@ std::string Value<T>::to_string() const {
 }
 
 template<typename T>
-Expression<T> Value<T>::derivative() const {
+Expression<T> Value<T>::derivative(const std::string& var) const {
     return Expression<T>(static_cast<T>(0));
 }

@@ -24,8 +24,8 @@ std::string SlashProduct<T>::to_string() const {
 }
 
 template<typename T>
-Expression<T> SlashProduct<T>::derivative() const {
-    Expression<T> numerator_part   = left_.derivative() * right_.derivative();
+Expression<T> SlashProduct<T>::derivative(const std::string& var) const {
+    Expression<T> numerator_part   = left_.derivative(var) * right_.derivative(var);
     Expression<T> denominator_part = left_ * left_;
     return numerator_part / denominator_part;
 }

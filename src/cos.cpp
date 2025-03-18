@@ -1,5 +1,5 @@
-#include "../include/expression.hpp"
 #include <cmath>
+#include "../include/expression.hpp"
 
 
 template<typename T>
@@ -19,9 +19,9 @@ std::string CosFunc<T>::to_string() const {
 }
 
 template<typename T>
-Expression<T> CosFunc<T>::derivative() const {
+Expression<T> CosFunc<T>::derivative(const std::string& var) const {
     Expression<T> first_part  = -Expression<T>(std::make_shared<SinFunc<T>>(arg_));
-    Expression<T> second_part = arg_.derivative();
+    Expression<T> second_part = arg_.derivative(var);
     return first_part * second_part;
 }
 

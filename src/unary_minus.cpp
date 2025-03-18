@@ -14,10 +14,10 @@ T UnaryMinusProduct<T>::eval(std::map<std::string, T> context) const {
 
 template<typename T>
 std::string UnaryMinusProduct<T>::to_string() const {
-    return "-(" + arg_.to_string() + ")";
+    return "(-" + arg_.to_string() + ")";
 }
 
 template<typename T>
-Expression<T> UnaryMinusProduct<T>::derivative() const {
-    return -arg_.derivative();
+Expression<T> UnaryMinusProduct<T>::derivative(const std::string& var) const {
+    return -arg_.derivative(var);
 }

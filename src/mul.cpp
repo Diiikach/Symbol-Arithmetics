@@ -24,7 +24,7 @@ std::string DotProduct<T>::to_string() const {
 }
 
 template<typename T>
-Expression<T> DotProduct<T>::derivative() const {
-    return left_.derivative() * right_ + left_ * right_.derivative();
+Expression<T> DotProduct<T>::derivative(const std::string& var) const {
+    return left_.derivative(var) * right_ + left_ * right_.derivative(var);
 }
 

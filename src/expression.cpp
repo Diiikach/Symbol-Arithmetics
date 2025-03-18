@@ -1,7 +1,8 @@
-#include "../include/expression.hpp"
-#define _USE_MATH_DEFINES
 #include "cmath"
 #include <sstream>
+#include "../include/expression.hpp"
+
+#define _USE_MATH_DEFINES
 
 template<typename T>
 Expression<T>::Expression(std::shared_ptr<ExpressionImplementation<T>> impl) :
@@ -12,6 +13,7 @@ template<typename T>
 Expression<T>::Expression(std::string var) :
     impl_ (std::make_shared<Variable<T>>(var))
 {}
+
 template<typename T>
 Expression<T>::Expression(T val) :
     impl_ (std::make_shared<Value<T>>(val))
@@ -102,8 +104,8 @@ std::string Expression<T>::to_string() const {
 }
 
 template<typename T>
-Expression<T> Expression<T>::derivative() const {
-    return impl_->derivative();
+Expression<T> Expression<T>::derivative(const std::string& var) const {
+    return impl_->derivative(var);
 }
 
 template<typename T>
@@ -146,8 +148,8 @@ Expression<T> Expression<T>::produce_token_(std::string s) {
         return Expression<T>(std::make_shared<LnFunc<T>>(produce_token_(s.substr(3, next_token_length))));
     }
     bool all_digits = true;
-    for (int el : s) {
-        all_digits &= !(isalnum(el) || el == '.');
+    for (char el : s) {
+        all_digits &= isdigit(el) || el == '.';
     }
     if (all_digits) {
         std::stringstream ss;

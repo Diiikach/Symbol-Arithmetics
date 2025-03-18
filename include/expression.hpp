@@ -16,14 +16,17 @@ public:
     virtual ~ExpressionImplementation() = default;
     virtual T eval(std::map<std::string, T> context) const = 0;
     virtual std::string to_string() const = 0;
-    virtual Expression<T> derivative() const = 0;
+    virtual Expression<T> derivative(const std::string& var) const = 0;
 };
 
 template <typename T>
 class Expression {
 public:
+    static Expression<T> from_string(std::string s);
     Expression(std::string var);
     Expression(T val);
+    Expression(std::shared_ptr<ExpressionImplementation<T>> impl);
+
 
     Expression operator+ (const Expression& that) const;
     Expression& operator+=(const Expression& that);
@@ -43,13 +46,12 @@ public:
 
     T eval(std::map<std::string, T> context) const;
     std::string to_string() const;
-    Expression<T> derivative() const;
-
-    Expression(std::shared_ptr<ExpressionImplementation<T>> impl);
+    Expression derivative(const std::string& var) const;
 
     private:
         std::shared_ptr<ExpressionImplementation<T>> impl_;
-
+        static Expression parse_expression_(int& i, const std::string& s);
+        static Expression<T> produce_token_(std::string s);
 };
 
 template <typename T>
@@ -60,7 +62,7 @@ public:
 
     T eval(std::map<std::string, T> context) const override;
     std::string to_string() const override;
-    Expression<T> derivative() const override;
+    Expression<T> derivative(const std::string& var) const override;
 
 private:
     T value_;
@@ -74,7 +76,7 @@ public:
 
     T eval(std::map<std::string, T> context) const override;
     std::string to_string() const override;
-    Expression<T> derivative() const override;
+    Expression<T> derivative(const std::string& var) const override;
 private:
     std::string name_;
 };
@@ -87,7 +89,7 @@ public:
 
     T eval(std::map<std::string, T> context) const override;
     std::string to_string() const override;
-    Expression<T> derivative() const override;
+    Expression<T> derivative(const std::string& var) const override;
 private:
     Expression<T> left_;
     Expression<T> right_;
@@ -101,7 +103,7 @@ public:
 
     T eval(std::map<std::string, T> context) const override;
     std::string to_string() const override;
-    Expression<T> derivative() const override;
+    Expression<T> derivative(const std::string& var) const override;
 private:
     Expression<T> left_;
     Expression<T> right_;
@@ -115,7 +117,7 @@ public:
 
     T eval(std::map<std::string, T> context) const override;
     std::string to_string() const override;
-    Expression<T> derivative() const override;
+    Expression<T> derivative(const std::string& var) const override;
 private:
     Expression<T> left_;
     Expression<T> right_;
@@ -129,7 +131,7 @@ public:
 
     T eval(std::map<std::string, T> context) const override;
     std::string to_string() const override;
-    Expression<T> derivative() const override;
+    Expression<T> derivative(const std::string& var) const override;
 private:
     Expression<T> base_;
     Expression<T> power_;
@@ -143,7 +145,7 @@ public:
 
     T eval(std::map<std::string, T> context) const override;
     std::string to_string() const override;
-    Expression<T> derivative() const override;
+    Expression<T> derivative(const std::string& var) const override;
 private:
     Expression<T> arg_;
 };
@@ -156,7 +158,7 @@ public:
 
     T eval(std::map<std::string, T> context) const override;
     std::string to_string() const override;
-    Expression<T> derivative() const override;
+    Expression<T> derivative(const std::string& var) const override;
 private:
     Expression<T> arg_;
 };
@@ -169,7 +171,7 @@ public:
 
     T eval(std::map<std::string, T> context) const override;
     std::string to_string() const override;
-    Expression<T> derivative() const override;
+    Expression<T> derivative(const std::string& var) const override;
 private:
     Expression<T> arg_;
 };
@@ -182,7 +184,7 @@ public:
 
     T eval(std::map<std::string, T> context) const override;
     std::string to_string() const override;
-    Expression<T> derivative() const override;
+    Expression<T> derivative(const std::string& var) const override;
 private:
     Expression<T> arg_;
 };
@@ -195,9 +197,19 @@ public:
 
     T eval(std::map<std::string, T> context) const override;
     std::string to_string() const override;
-    Expression<T> derivative() const override;
+    Expression<T> derivative(const std::string& var) const override;
 private:
     Expression<T> arg_;
+};
+
+class Token {
+public:
+    std::string body;
+
+    enum class TOKEN_TYPE {
+        EMPTY,
+        UNIT,
+    } type;
 };
 
 #endif

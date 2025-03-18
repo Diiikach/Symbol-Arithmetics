@@ -22,9 +22,9 @@ std::string PlusProduct<T>::to_string() const {
 }
 
 template<typename T>
-Expression<T>PlusProduct<T>::derivative() const {
-    Expression<T> first_part  = left_.derivative();
-    Expression<T> second_part = right_.derivative();
+Expression<T>PlusProduct<T>::derivative(const std::string& var) const {
+    Expression<T> first_part  = left_.derivative(var);
+    Expression<T> second_part = right_.derivative(var);
     return first_part + second_part;
 }
 

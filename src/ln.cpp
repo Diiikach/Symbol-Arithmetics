@@ -19,8 +19,8 @@ std::string LnFunc<T>::to_string() const {
 }
 
 template<typename T>
-Expression<T> LnFunc<T>::derivative() const {
+Expression<T> LnFunc<T>::derivative(const std::string& var) const {
     Expression<T> first_part  = Expression<T>(1) / arg_;
-    Expression<T> second_part = arg_.derivative();
+    Expression<T> second_part = arg_.derivative(var);
     return first_part * second_part;
 }
