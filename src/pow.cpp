@@ -24,14 +24,7 @@ std::string PowProduct<T>::to_string() const {
 
 template<typename T>
 Expression<T> PowProduct<T>::derivative(const std::string& var) const {
-    Expression<T> first_part(0);
-    Expression<T> second_part(0);
-    if (base_.is_val()) {
-        first_part  = Expression<T>(std::make_shared<PowProduct<T>>(*this)) * base_.ln();
-        second_part = power_.derivative(var);
-    } else {
-        first_part  = power_ * Expression<T>(std::make_shared<PowProduct<T>>(base_, power_ - Expression<T>(1)));
-        second_part = base_.derivative(var);
-    }
+    Expression<T> first_part = base_.pow(power_);
+    Expression<T> second_part = power_ / base_ * base_.derivative(var) + power_.derivative(var) * base_.ln();
     return first_part * second_part;
 }
