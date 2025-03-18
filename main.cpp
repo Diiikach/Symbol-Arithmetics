@@ -15,8 +15,6 @@ int main(int argc, char* argv[]) {
     }
     if (std::string(argv[1]) == "--eval") {
         std::string exp_string = argv[2];
-        std::cout << exp_string << std::endl;
-        std::cout << exp_string.substr(0, std::string::npos - 1) << std::endl;
         Expression<long double> exp = Expression<long double>::from_string(exp_string.substr(0, std::string::npos - 1));
         std::map<std::string, long double> context;
         for (int i = 3; i < argc; i++) {

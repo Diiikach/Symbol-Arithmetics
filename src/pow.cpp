@@ -1,6 +1,5 @@
 #include "../include/expression.hpp"
 
-
 template<typename T>
 PowProduct<T>::PowProduct(const Expression<T> base, const Expression<T> power):
     base_ (base),
@@ -25,7 +24,14 @@ std::string PowProduct<T>::to_string() const {
 
 template<typename T>
 Expression<T> PowProduct<T>::derivative(const std::string& var) const {
-    Expression<T> first_part  = power_ * Expression<T>(std::make_shared<PowProduct<T>>(base_, power_ - Expression<T>(1)));
-    Expression<T> second_part = base_.derivative(var);
+    Expression<T> first_part(0);
+    Expression<T> second_part(0);
+    if (base_.is_val()) {
+        first_part  = Expression<T>(std::make_shared<PowProduct<T>>(*this)) * base_.ln();
+        second_part = power_.derivative(var);
+    } else {
+        first_part  = power_ * Expression<T>(std::make_shared<PowProduct<T>>(base_, power_ - Expression<T>(1)));
+        second_part = base_.derivative(var);
+    }
     return first_part * second_part;
 }

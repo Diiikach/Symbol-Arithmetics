@@ -12,7 +12,9 @@ template<typename T>
 T SlashProduct<T>::eval(std::map<std::string, T> context) const {
     T value_left  = left_.eval(context);
     T value_right = right_.eval(context);
-
+    if (value_right <= 0) {
+        throw std::runtime_error("Division by 0");
+    }
     return value_left / value_right;
 }
 

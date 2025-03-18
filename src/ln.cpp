@@ -10,6 +10,9 @@ LnFunc<T>::LnFunc(Expression<T> arg):
 template<typename T>
 T LnFunc<T>::eval(std::map<std::string, T> context) const {
     T arg_num = arg_.eval(context);
+    if (arg_num <= 0) {
+        throw std::invalid_argument("argument must be positive");
+    }
     return std::log(arg_num);
 }
 

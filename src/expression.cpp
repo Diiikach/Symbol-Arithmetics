@@ -109,6 +109,11 @@ Expression<T> Expression<T>::derivative(const std::string& var) const {
 }
 
 template<typename T>
+bool Expression<T>::is_val() const {
+    return impl_->is_value();
+}
+
+template<typename T>
 Expression<T> Expression<T>::from_string(const std::string s) {
     int pointer = 0;
     return parse_expression_(pointer, s);

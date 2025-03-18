@@ -17,6 +17,9 @@ public:
     virtual T eval(std::map<std::string, T> context) const = 0;
     virtual std::string to_string() const = 0;
     virtual Expression<T> derivative(const std::string& var) const = 0;
+    virtual bool is_value() const {
+        return false;
+    }
 };
 
 template <typename T>
@@ -47,6 +50,7 @@ public:
     T eval(std::map<std::string, T> context) const;
     std::string to_string() const;
     Expression derivative(const std::string& var) const;
+    bool is_val() const;
 
     private:
         std::shared_ptr<ExpressionImplementation<T>> impl_;
@@ -63,6 +67,9 @@ public:
     T eval(std::map<std::string, T> context) const override;
     std::string to_string() const override;
     Expression<T> derivative(const std::string& var) const override;
+    bool is_value() const override  {
+        return true;
+    }
 
 private:
     T value_;
