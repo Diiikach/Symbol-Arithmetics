@@ -12,8 +12,10 @@ GTEST_DIR = googletest
 SRC_FILES = $(wildcard $(SRC_DIR)/*.cpp) main.cpp
 
 main:
-	$(CXX) $(CXXFLAGS) $(SRC_FILES) -o main
-	./main
+	$(CXX) $(CXXFLAGS) $(SRC_FILES) -o differentiator
+
+build:
+	$(CXX) $(CXXFLAGS) $(SRC_FILES) -o differentiator
 
 test:
 	$(CXX) $(CXXFLAGS) $(wildcard src/*.cpp) $(wildcard tests/*.cpp) $(GTEST_LIBS) -o test.out

@@ -1,3 +1,0 @@
-/home/dikach/Documents/Первый курс ПИ/Symbol-Arithmetics/cmake-build-debug/CMakeFiles/Symbol_Arithmetics.dir
-/home/dikach/Documents/Первый курс ПИ/Symbol-Arithmetics/cmake-build-debug/CMakeFiles/edit_cache.dir
-/home/dikach/Documents/Первый курс ПИ/Symbol-Arithmetics/cmake-build-debug/CMakeFiles/rebuild_cache.dir
